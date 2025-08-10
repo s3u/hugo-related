@@ -6,9 +6,12 @@ import json
 from pathlib import Path
 import datetime
 
-ARTICLES_DIR = "./content/articles"
-PREFIX = "/articles/"
-DATA_OUT = "./data/related/index.json"
+# Environment-configurable settings (with defaults matching README)
+ARTICLES_DIR = os.environ.get("RELATED_ARTICLES_DIR", "./content/articles")
+PREFIX = os.environ.get("RELATED_URL_PREFIX", "/articles/")
+DATA_OUT = os.environ.get("RELATED_DATA_OUT", "./data/related/index.json")
+TOP_N = int(os.environ.get("RELATED_TOP_N", "5"))
+MODEL_NAME = os.environ.get("RELATED_MODEL", "BAAI/bge-large-en")
 
 def extract_yaml_and_body(content):
     lines = content.splitlines()
@@ -57,7 +60,7 @@ def main():
     docs, filenames, full_paths, slugs, dates = collect_markdown_files(ARTICLES_DIR)
     print(f"Found {len(docs)} markdown files.")
 
-    model = SentenceTransformer('BAAI/bge-large-en')
+    model = SentenceTransformer(MODEL_NAME)
     embeddings = model.encode(docs, convert_to_tensor=True)
     similarity = cosine_similarity(embeddings.cpu().numpy())
 
@@ -67,7 +70,7 @@ def main():
         sim_scores = list(enumerate(similarity[idx]))
         sim_scores = [s for s in sim_scores if s[0] != idx]
         sim_scores.sort(key=lambda x: x[1], reverse=True)
-        top_related = sim_scores[:5]
+        top_related = sim_scores[:TOP_N]
 
         items = []
         for ridx, score in top_related:
