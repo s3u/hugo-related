@@ -88,7 +88,7 @@ def main():
                 date = ""
 
             if slug:
-                url = f"{PREFIX}{subdir}{slug}/"
+                url = f"{PREFIX}{subdir}/{slug}/"
             else:
                 url = f"{PREFIX}{filenames[ridx][:-3]}/"
 
