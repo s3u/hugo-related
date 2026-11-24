@@ -7,8 +7,8 @@ from pathlib import Path
 import datetime
 
 # Environment-configurable settings (with defaults matching README)
-ARTICLES_DIR = os.environ.get("RELATED_ARTICLES_DIR", "./content/articles")
-PREFIX = os.environ.get("RELATED_URL_PREFIX", "/articles/")
+ARTICLES_DIR = os.environ.get("RELATED_ARTICLES_DIR", "./content/essays")
+PREFIX = os.environ.get("RELATED_URL_PREFIX", "/essays/")
 DATA_OUT = os.environ.get("RELATED_DATA_OUT", "./data/related/index.json")
 TOP_N = int(os.environ.get("RELATED_TOP_N", "5"))
 MODEL_NAME = os.environ.get("RELATED_MODEL", "BAAI/bge-large-en")
